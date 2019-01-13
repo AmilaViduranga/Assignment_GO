@@ -1,0 +1,63 @@
+<table class="table table-striped" [mfData]="data" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage">
+    <thead>
+    <tr>
+        <th>
+            <mfDefaultSorter by="idbookings">Booking ID</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="start_latitude">Pickup Address</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="end_latitud">Drop Address</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="driver_name">Driver Name</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="customer_name">Customer Name</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="total_distance">Total Distance Travelled(In KM)</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="bill_amount">Bill Amount (In $)</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="status">status</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="CreatedDate">created</mfDefaultSorter>
+        </th>
+        <th>
+            <mfDefaultSorter by="action">Actions</mfDefaultSorter>
+        </th>
+    </tr>
+    </thead>
+    <tbody *ngIf="data.length != 0">
+      <tr *ngFor="let item of mf.data">
+          <td>{{item.idbookings}}</td>
+          <td>Latitude:-{{item.start_latitude}}, Logtitude:- {{item.start_logitude}}</td>
+          <td>Latitude:-{{item.end_latitud}}, Logtitude:- {{item.end_logitude}}</td>
+          <td>{{item.driver_name}}</td>
+          <td>{{item.customer_name}}</td>
+          <td>{{item.total_distance}}</td>
+          <td>{{item.bill_amount}}</td>
+          <td *ngIf="item.status == 1">Completed</td>
+          <td *ngIf="item.status == 2">Accepted</td>
+          <td *ngIf="item.status == 3">Pending</td>
+          <td>{{item.CreatedDate}}</td>
+          <td>
+              <button class="btn btn-success">Edit</button>
+              <button class="btn btn-danger">Delete</button>
+          </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+          <td colspan="4">
+              <mfBootstrapPaginator [rowsOnPageSet]="rowsOnPage"></mfBootstrapPaginator>
+          </td>
+      </tr>
+    </tfoot>
+</table>
+

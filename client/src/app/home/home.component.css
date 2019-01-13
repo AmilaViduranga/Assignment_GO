@@ -1,0 +1,14 @@
+.apply-padding {
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+.modal-dialog {
+    max-width: 800px;
+    margin: 1.75rem auto;
+}
+
+.modal-header {
+    color: white;
+    background-color: dodgerblue;
+}

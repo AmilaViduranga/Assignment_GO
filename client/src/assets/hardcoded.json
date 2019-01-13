@@ -1,0 +1,22 @@
+{
+    "recordCounts": [
+        { "key": "10", "value": "10" },
+        { "key": "20", "value": "20" },
+        { "key": "50", "value": "50" },
+        { "key": "100", "value": "100" }
+    ],
+    "status": [
+        { "key": 3, "value": "pending"},
+        { "key": 2, "value": "accepted"},
+        { "key": 1, "value": "completed"}
+    ],
+    "bookingTypes": [
+        { "key": 1, "value": "fixed"},
+        { "key": 2, "value": "variable"}
+    ],
+    "MUVEInternal": [
+        { "key": "yes", "value": "yes"},
+        { "key": "no", "value": "no"}
+    ]
+
+}

@@ -1,0 +1,7 @@
+<div class="form-group">
+  <label *ngIf="enableLabel">{{labelValue}}</label>
+  <select class="form-control" [(ngModel)]="model" (change)="sendModelValue()">
+    <option selected="true" disabled="disabled" [value]="defaultOption">{{defaultOption}}</option>  
+    <option *ngFor="let item of items" [value]="item.value">{{item.label}}</option>
+  </select>
+</div>

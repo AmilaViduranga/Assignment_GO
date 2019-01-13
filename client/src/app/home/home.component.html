@@ -1,0 +1,124 @@
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Booking</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-5">
+            <app-select
+              [itemList] = "passengerList"
+              defaultOption = "Search Passenger by mail"
+              key = "create-passenger"
+              (modelValue) = getDataFromComponents($event)
+            ></app-select>
+            <app-input
+              placeholder = "Driver Name"
+              key = "create-driverName"
+              [isLabelEnable] = "true"
+              (modelValue) = getDataFromComponents($event)
+            ></app-input>
+          </div>
+          <div class="col-sm-7">
+            <app-map
+              title = "Start Location"
+            ></app-map>
+            <app-map
+              title = "End Location"
+            ></app-map>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Add Booking</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row apply-padding">
+  <div class="col-sm-12">
+    <div class="row">
+      <label>Page 1 of {{totalPages}}, Total records {{dataSendToTable.length}} | Views &nbsp;</label>
+      <app-select
+        [itemList] = "statics.recordCounts"
+        defaultOption = "select count"
+        key = "recordsOnTable"
+        (modelValue) = getDataFromComponents($event)
+      ></app-select> &nbsp;
+      <div class="pull-right">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Booking</button>
+      </div>
+    </div>
+    <div class="row">
+        <app-select
+          [itemList] = "statics.bookingTypes"
+          defaultOption = "Search By Booking Type"
+          key = "bookingTypes"
+          (modelValue) = getDataFromComponents($event)
+        ></app-select> &nbsp;
+        <app-select
+          [itemList] = "statics.status"
+          defaultOption = "Search By Status"
+          key = "searchByStatus"
+          (modelValue) = getDataFromComponents($event)
+        ></app-select> &nbsp;
+        <app-input
+          placeholder = "Rider Name"
+          key = "riderName"
+          (modelValue) = getDataFromComponents($event)
+        ></app-input> &nbsp;
+        <app-input
+          placeholder = "Rider Phone"
+          key = "riderPhone"
+          type = "number"
+          (modelValue) = getDataFromComponents($event)
+        ></app-input> &nbsp;
+        <app-input
+          placeholder = "Customer Name"
+          key = "customerName"
+          (modelValue) = getDataFromComponents($event)
+        ></app-input>
+    </div>
+    <div class="row">
+      <app-input
+        placeholder = "Customer Phone"
+        key = "customerPhone"
+        type = "number"
+        (modelValue) = getDataFromComponents($event)
+      ></app-input> &nbsp;
+      <app-input
+        placeholder = "Search By Date"
+        type = "date"
+        key = "searchFromDate"
+        (modelValue) = getDataFromComponents($event)
+      ></app-input> &nbsp;
+      <div>
+        <button class="btn btn-primary" (click)="searchInfo()">Search</button>&nbsp;
+      </div>
+      <div>
+        <button class="btn btn-primary" (click) = "ReSetAllData()">Reset</button>&nbsp;
+      </div>
+      <div>
+        <button class="btn btn-primary" (click)="exportAsXLSX()">Export as Excel</button>&nbsp;
+      </div>
+    </div>
+    <div class="row">
+        <span>Showing Page 1 of {{totalPages}}</span><br/>
+    </div>
+    <div class="row">
+      <app-table
+       [data] = "dataSendToTable"
+       [rowsOnPage] = "recordsOnTable"
+       [driverName] = "searchedRider"
+      ></app-table>
+    </div>
+  </div>
+</div>
+
