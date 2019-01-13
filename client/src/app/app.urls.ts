@@ -6,6 +6,7 @@ export class UrlsList {
     PASSENGERS_INFO:string;
     VEHICLE_INFO: string;
     CREATE_BOOKING: string;
+    LOGIN: string;
 
     constructor() {
         this.GET_BOOKING_INFO = this.SERVICE_URL + "all-bookings";
@@ -13,5 +14,6 @@ export class UrlsList {
         this.PASSENGERS_INFO = this.SERVICE_URL + "passengers";
         this.VEHICLE_INFO = this.SERVICE_URL + "vehicleInfo";
         this.CREATE_BOOKING = this.SERVICE_URL + "bookings";
+        this.LOGIN = this.SERVICE_URL + "authenticate";
     }
 }

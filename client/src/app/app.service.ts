@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { UrlsList } from './app.urls';
 import * as FileSaver from 'file-saver';
@@ -13,17 +14,25 @@ const EXCEL_EXTENSION = '.xlsx';
   providedIn: 'root'
 })
 export class AppService {
+  static TOKEN:string;
   urls:UrlsList = new UrlsList();
-
-  headers:HttpHeaders = new HttpHeaders({
-    'authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXNzd29yZCI6ImFkbWluIiwidXNlcm5hbWUiOiJhZG1pbiJ9.4PWUk3ApGtV6sexF4lOYeWgozLKKdh0iOudZ0PV4krQ',
-    'content-type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    "Access-Control-Allow-Headers": "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization"
-  });
+  headers:HttpHeaders;
   
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private route: Router) { 
     
+  }
+
+  setHeaders() {
+    if(AppService.TOKEN) {
+      this.headers = new HttpHeaders({
+        'authorization': AppService.TOKEN,
+        'content-type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        "Access-Control-Allow-Headers": "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization"
+      });
+    } else {
+      this.route.navigateByUrl('/login');
+    }
   }
 
   getHardCodedValues(): Observable<any> {
@@ -31,23 +40,32 @@ export class AppService {
   }  
 
   getBookingInformations(): Observable<any> {
+    this.setHeaders();
     return this.http.get(this.urls.GET_BOOKING_INFO, {headers: this.headers});
   }
 
   getSerchedData(searchedData):Observable<any> {
+    this.setHeaders();
     return this.http.post(this.urls.SEARCH_RIDES_INFO,searchedData,{headers: this.headers});
   }
 
   getPassengerDetails():Observable<any>{
+    this.setHeaders();
     return this.http.get(this.urls.PASSENGERS_INFO,{headers: this.headers});
   }
 
   getVehicleDetails():Observable<any> {
+    this.setHeaders();
     return this.http.get(this.urls.VEHICLE_INFO, {headers: this.headers})
   }
 
   createNewBooking(data):Observable<any> {
+    this.setHeaders();
     return this.http.post(this.urls.CREATE_BOOKING, data, {headers: this.headers});
+  }
+
+  loginToSystem(credentials):Observable<any> {
+    return this.http.post(this.urls.LOGIN, credentials);
   }
 
   exportAsExcelFile(json: any[], excelFileName: string): void {
