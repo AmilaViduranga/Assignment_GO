@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule }   from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { UtilsModule } from './utils/utils.module';
 import { HomeComponent } from './home/home.component';
@@ -20,6 +22,8 @@ import { AppComponent } from './app.component';
     AppRouting,
     UtilsModule,
     HttpClientModule,
+    NgbModule,
+    FormsModule
   ],
   providers: [
     AppService

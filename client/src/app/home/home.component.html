@@ -11,32 +11,72 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-sm-5">
-            <app-select
-              [itemList] = "passengerList"
-              defaultOption = "Search Passenger by mail"
-              key = "create-passenger"
-              (modelValue) = getDataFromComponents($event)
-            ></app-select>
             <app-input
-              placeholder = "Driver Name"
-              key = "create-driverName"
               [isLabelEnable] = "true"
+              placeholder = "Booking Date"
+              type = "date"
+              key = "create-bookingDate"
               (modelValue) = getDataFromComponents($event)
             ></app-input>
+            <app-select
+              [enableLabel] = "true"
+              labelValue = "Booking Type"
+              [itemList] = "statics.bookingTypes"
+              defaultOption = "Search By Booking Type"
+              key = "create-bookingType"
+              (modelValue) = getDataFromComponents($event)
+            ></app-select> 
+            <app-select
+              [itemList] = "passengerList"
+              [enableLabel] = "true"
+              labelValue = "Customer Email"
+              defaultOption = "Select Passenger by mail"
+              key = "create-passenger"
+              (modelValue) = getDataFromComponents($event)
+              #customerList
+            ></app-select>
+            <app-select
+              [itemList] = "vehicleList"
+              [enableLabel] = "true"
+              labelValue = "Vehicle No"
+              defaultOption = "Select Vehicle No"
+              key = "create-vehicle"
+              (modelValue) = getDataFromComponents($event)
+              #vehicleListElement
+            ></app-select>
+            <div>
+              <label>Start Location details</label><br/>
+              <span class="badge badge-primary">Start-Latitude: {{startLatitude}}</span> &nbsp;
+              <span class="badge badge-primary">Start-Longtitude: {{startLongtitude}}</span>
+            </div><br>
+            <div>
+              <label>End Location details</label><br/>
+              <span class="badge badge-primary">End-Latitude: {{endLatitude}}</span> &nbsp;
+              <span class="badge badge-primary">End-Longtitude: {{endLongtitude}}</span>
+            </div><br>
+            <div class="form-group">
+                <label>Time</label><br/>
+                <input type="time" class="form-control" [(ngModel)]="newBookingInstance.timebooking" name="time"/>
+            </div>
           </div>
           <div class="col-sm-7">
             <app-map
               title = "Start Location"
+              key = "create-startLocation"
+              (modelValue) = getDataFromComponents($event)
             ></app-map>
             <app-map
               title = "End Location"
+              key = "create-endLocation"
+              (modelValue) = getDataFromComponents($event)
             ></app-map>
           </div>
         </div>
       </div>
       <div class="modal-footer">
+        <ngb-alert *ngIf="isMessageStateEnable" [type]="responseType">{{respondMessage}}</ngb-alert>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Add Booking</button>
+        <button type="button" class="btn btn-primary" (click)="createNewBooking()">Add Booking</button>
       </div>
     </div>
   </div>

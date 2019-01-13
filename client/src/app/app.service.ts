@@ -42,6 +42,14 @@ export class AppService {
     return this.http.get(this.urls.PASSENGERS_INFO,{headers: this.headers});
   }
 
+  getVehicleDetails():Observable<any> {
+    return this.http.get(this.urls.VEHICLE_INFO, {headers: this.headers})
+  }
+
+  createNewBooking(data):Observable<any> {
+    return this.http.post(this.urls.CREATE_BOOKING, data, {headers: this.headers});
+  }
+
   exportAsExcelFile(json: any[], excelFileName: string): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };

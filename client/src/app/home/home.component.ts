@@ -1,17 +1,19 @@
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AppService } from '../app.service';
+import { SelectComponent } from '../utils/select/select.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, AfterContentInit {
+export class HomeComponent implements OnInit {
 
   statics:any;
   bookingData:any[] = [];
   dataSendToTable:any[] = [];
   passengerList:any[] = [];
+  vehicleList:any[] = [];
   recordsOnTable:number = 10;
   totalPages:number = 0;
   bookingTypes:number = 0;
@@ -21,6 +23,17 @@ export class HomeComponent implements OnInit, AfterContentInit {
   searchByCustomerName:string = "";
   searchByCustomerPhone:string = "";
   searchByDate:string = "";
+  isMessageStateEnable:boolean = false;
+  responseType:string = "";
+  respondMessage:string = "";
+
+  startLatitude:number = 0;
+  startLongtitude:number = 0;
+  endLatitude:number = 0;
+  endLongtitude:number = 0;
+
+  @ViewChild("customerList")  customerListElement: SelectComponent;
+  @ViewChild("vehicleListElement") vehicleListLoader: SelectComponent;
   
   //filtering keys
   isTypeFilterDirty:boolean = false;
@@ -30,15 +43,15 @@ export class HomeComponent implements OnInit, AfterContentInit {
   isCustomerNameDirty:boolean = false;
   isCustomerPhoneDirty:boolean = false;
   isSearchedByDateDirty:boolean =  false;
+
+  newBookingInstance:BookingModel = new BookingModel();
   constructor(private service: AppService) { }
 
   ngOnInit() {
     this.getAllBookings();
-  }
-
-  ngAfterContentInit() {
+    this.getVehicleInfo();
+    this.getPassengerInfo();
     this.loadHardCodedValues();
-    this.getPassengerDetails();
   }
 
   getDataFromComponents(value) {
@@ -98,6 +111,36 @@ export class HomeComponent implements OnInit, AfterContentInit {
       if(this.searchByDate.length == 0) {
         this.dataSendToTable = this.bookingData;
       }
+    }
+
+    if(value.key == "create-startLocation") {
+      this.startLatitude = value.value.lat;
+      this.startLongtitude = value.value.lng;
+      this.newBookingInstance.start_latitude = this.startLatitude.toString();
+      this.newBookingInstance.start_logitude = this.startLongtitude.toString();
+    }
+
+    if(value.key == "create-endLocation") {
+      this.endLatitude = value.value.lat;
+      this.endLongtitude = value.value.lng;
+      this.newBookingInstance.end_latitud = this.endLatitude.toString();
+      this.newBookingInstance.end_logitude = this.endLongtitude.toString();
+    }
+
+    if(value.key == "create-bookingDate") {
+      this.newBookingInstance.datebooking = value.value;
+    }
+
+    if(value.key == "create-bookingType") {
+      this.newBookingInstance.booking_type = parseInt(value.value);
+    }
+
+    if(value.key == "create-passenger") {
+      this.newBookingInstance.passenger_id = parseInt(value.value);
+    }
+
+    if(value.key == "create-vehicle") {
+      this.newBookingInstance.driver_vehicles_id = parseInt(value.value);
     }
 
     this.totalPages = Math.round(this.dataSendToTable.length / this.recordsOnTable);
@@ -215,8 +258,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
     this.service.exportAsExcelFile(this.dataSendToTable, 'sample');
   }
 
-  getPassengerDetails() {
-    this.passengerList = [];
+  getPassengerInfo() {
     this.service.getPassengerDetails().subscribe(data => {
       data.forEach(passenger => {
         this.passengerList.push({
@@ -224,7 +266,50 @@ export class HomeComponent implements OnInit, AfterContentInit {
           "value": passenger.Email
         })
       })
+      this.customerListElement.prepareItems();
     })
-    console.log(this.passengerList);
   }
+
+  getVehicleInfo() {
+    this.service.getVehicleDetails().subscribe(data => {
+      data.forEach(vehicle => {
+        this.vehicleList.push({
+          "key": vehicle.driver_vehicle_id,
+          "value": vehicle.no_plate
+        })
+      })
+      this.vehicleListLoader.prepareItems();
+    })
+  }
+
+  createNewBooking() {
+    this.service.createNewBooking(this.newBookingInstance).subscribe(data => {
+      this.isMessageStateEnable = true;
+      this.responseType = "success";
+      this.respondMessage = "Successfylly submitted your booking";
+      setTimeout(() => {
+        this.isMessageStateEnable = false;
+      }, 5000);
+    }, err => {
+      this.isMessageStateEnable = true;
+      this.responseType = "danger";
+      this.respondMessage = "Booking is failed, please try again";
+      setTimeout(() => {
+        this.isMessageStateEnable = false;
+      }, 5000);
+    })
+  }
+  
+}
+
+export class BookingModel {
+  passenger_id:number;
+  driver_vehicles_id: number;
+  datebooking:any;
+  timebooking:any;
+  start_logitude:string;
+  start_latitude:string;
+  end_logitude:string;
+  end_latitud:string;
+  booking_type:number;
 }

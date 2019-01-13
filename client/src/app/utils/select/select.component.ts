@@ -26,9 +26,8 @@ export class SelectComponent implements OnInit {
     }
   }
 
-  prepareItems() {
+  public prepareItems() {
     if(this.itemList.length != 0) {
-      console.log(this.itemList);
       this.itemList.forEach(item => {
         this.items.push(new Item(item));
       })
