@@ -55,7 +55,6 @@ type SearchModel struct {
 func CreateBooking(w http.ResponseWriter, r *http.Request) {
 
 	Services.HandleCors(&w, r)
-
 	dbcon := Connections.CreateConnection()
 	if r.Method == "POST" {
 		body, err := ioutil.ReadAll(r.Body)

@@ -16,6 +16,11 @@ type DriverModel struct {
 	Password   string `json:"Password"`
 }
 
+type DriverVehichleModel struct {
+	Driver_Vehicle_id	int	`json:"driver_vehicle_id"`
+	No_Plate			string `json:"no_plate"`
+}
+
 func GetAllDrivers(w http.ResponseWriter, r *http.Request) {
 	/*Cors Handling*/
 	Services.HandleCors(&w, r)
@@ -49,3 +54,37 @@ func GetAllDrivers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(responseObject)
 	dbcon.Close()
 }
+
+func GetVehicleDetails(w http.ResponseWriter, r *http.Request) {
+	/*Cors Handling*/
+	Services.HandleCors(&w, r)
+	//Open Db Connction
+	dbcon := Connections.CreateConnection()
+
+	DriverVehicleObj := DriverVehichleModel{}
+	responseObject := []DriverVehichleModel{}
+	results, err := dbcon.Query("SELECT d.driver_vehicles_id, d.no_plate from driver_vehicles d")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	for results.Next() {
+		var driver_vehicle_id int
+		var no_plate string
+		//var rides GetAllRidesModel
+		err = results.Scan(&driver_vehicle_id, &no_plate)
+		if err != nil {
+			panic(err.Error())
+		} else {
+			DriverVehicleObj.Driver_Vehicle_id = driver_vehicle_id
+			DriverVehicleObj.No_Plate = no_plate
+			responseObject = append(responseObject, DriverVehicleObj)
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(responseObject)
+	dbcon.Close()
+}
+
+

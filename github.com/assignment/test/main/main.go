@@ -48,6 +48,7 @@ func main() {
 
 	/*Drivers Routes¶*/
 	router.HandleFunc("/drivers", Services.ValidateMiddleware(Drivers.GetAllDrivers)).Methods("GET")
+	router.HandleFunc("/vehicleInfo", Services.ValidateMiddleware(Drivers.GetVehicleDetails)).Methods("GET")
 
 	/*Bookings Routes¶*/
 	router.HandleFunc("/bookings", Services.ValidateMiddleware(Bookings.CreateBooking)).Methods("POST")
